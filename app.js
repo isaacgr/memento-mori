@@ -39,11 +39,11 @@ function getStartDate() {
   return new Date("1992-01-29");
 }
 
-function getGridDate(year, week) {
-  const startDate = getStartDate();
+function getGridDate(week) {
+  const startDate = new Date("1992-01");
   const day = 1 + (week - 1) * 7;
   return new Date(
-    startDate.getFullYear() + year,
+    startDate.getFullYear(),
     startDate.getMonth(),
     startDate.getDate() + day
   );
@@ -82,23 +82,22 @@ function generateGrid() {
   let rows = [...Array(80).keys()].map((_, year) => {
     let tds = [...Array(52).keys()]
       .map((_, week) => {
-        if (year == 0) {
-          return `<td id=${year + 1 * week + 1} ${
-            year + 1 * week + 1 <= numWeeks ? "class=fill" : ""
-          }></td>`;
-        } else {
-          return `<td id=${year + 1 * week + 1 + 52 * year} ${
-            isSameWeek(dadsDeath(), getGridDate(year + 1, week + 1))
-              ? "class=fill-red"
-              : isSameWeek(weMet(), getGridDate(year + 1, week + 1))
-              ? "class=fill-blue"
-              : year + 1 * week + 1 + 52 * year < numWeeks
-              ? "class=fill"
-              : year + 1 * week + 1 + 52 * year == numWeeks
-              ? "class=fill-green"
-              : ""
-          }></td>`;
-        }
+        return `<td id=${year + 1 * week + 1 + 52 * year} ${
+          isSameWeek(dadsDeath(), getGridDate(year + 1 * week + 1 + 52 * year))
+            ? "class=fill-red"
+            : isSameWeek(weMet(), getGridDate(year + 1 * week + 1 + 52 * year))
+            ? "class=fill-blue"
+            : isSameWeek(
+                getStartDate(),
+                getGridDate(year + 1 * week + 1 + 52 * year)
+              )
+            ? "class=fill-orange"
+            : year + 1 * week + 1 + 52 * year < numWeeks
+            ? "class=fill"
+            : year + 1 * week + 1 + 52 * year == numWeeks
+            ? "class=fill-green"
+            : ""
+        }></td>`;
       })
       .join("");
     return `<tr>${tds}</tr>`;
