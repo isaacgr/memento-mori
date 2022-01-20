@@ -103,7 +103,7 @@ function generateGrid() {
                 getStartDate(),
                 getGridDate(getWeekNumber(currYear, currWeek))
               )
-            ? "class=fill-orange"
+            ? "class=fill-yellow"
             : getWeekNumber(currYear, currWeek) < numWeeks
             ? "class=fill"
             : getWeekNumber(currYear, currWeek) == numWeeks
