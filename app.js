@@ -26,9 +26,9 @@ Date.prototype.getWeekNumber = function () {
 
 function isSameWeek(date1, date2) {
   if (
-    date1.getFullYear() == date2.getFullYear() &&
-    date1.getMonth() == date2.getMonth() &&
-    date1.getWeekNumber() == date2.getWeekNumber()
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getWeekNumber() === date2.getWeekNumber()
   ) {
     return true;
   }
@@ -39,8 +39,12 @@ function getStartDate() {
   return new Date("1992-01-29");
 }
 
+function getWeekNumber(year, week) {
+  return year * 52 - (53 - week) + 1;
+}
+
 function getGridDate(week) {
-  const startDate = new Date("1992-01");
+  const startDate = getStartDate();
   const day = 1 + (week - 1) * 7;
   return new Date(
     startDate.getFullYear(),
@@ -82,19 +86,27 @@ function generateGrid() {
   let rows = [...Array(80).keys()].map((_, year) => {
     let tds = [...Array(52).keys()]
       .map((_, week) => {
-        return `<td id=${year + 1 * week + 1 + 52 * year} ${
-          isSameWeek(dadsDeath(), getGridDate(year + 1 * week + 1 + 52 * year))
+        let currYear = year + 1;
+        let currWeek = week + 1;
+        return `<td id=${getWeekNumber(currYear, currWeek)} ${
+          isSameWeek(
+            dadsDeath(),
+            getGridDate(getWeekNumber(currYear, currWeek))
+          )
             ? "class=fill-red"
-            : isSameWeek(weMet(), getGridDate(year + 1 * week + 1 + 52 * year))
+            : isSameWeek(
+                weMet(),
+                getGridDate(getWeekNumber(currYear, currWeek))
+              )
             ? "class=fill-blue"
             : isSameWeek(
                 getStartDate(),
-                getGridDate(year + 1 * week + 1 + 52 * year)
+                getGridDate(getWeekNumber(currYear, currWeek))
               )
             ? "class=fill-orange"
-            : year + 1 * week + 1 + 52 * year < numWeeks
+            : getWeekNumber(currYear, currWeek) < numWeeks
             ? "class=fill"
-            : year + 1 * week + 1 + 52 * year == numWeeks
+            : getWeekNumber(currYear, currWeek) == numWeeks
             ? "class=fill-green"
             : ""
         }></td>`;
