@@ -53,16 +53,6 @@ function getGridDate(week) {
   );
 }
 
-function dadsDeath() {
-  const startDate = getStartDate();
-  return new Date(startDate.getFullYear() + 62, 9, 29);
-}
-
-function weMet() {
-  const startDate = getStartDate();
-  return new Date(startDate.getFullYear() + 24, 5, 16);
-}
-
 function getDatesArray() {
   return getDates(getStartDate(), new Date());
 }
@@ -80,6 +70,36 @@ function renderAgeStats() {
   )} Weeks / ${80 * 52 * 7 - age} Days`;
 }
 
+function graduatedCollege() {
+  const startDate = getStartDate();
+  return new Date(startDate.getFullYear() + 22, 3, 15);
+}
+
+function graduatedUni() {
+  const startDate = getStartDate();
+  return new Date(startDate.getFullYear() + 24, 3, 15);
+}
+
+function weMet() {
+  const startDate = getStartDate();
+  return new Date(startDate.getFullYear() + 24, 5, 16);
+}
+
+function covid() {
+  const startDate = getStartDate();
+  return new Date(startDate.getFullYear() + 28, 2, 17);
+}
+
+function dadsDeath() {
+  const startDate = getStartDate();
+  return new Date(startDate.getFullYear() + 62, 9, 29);
+}
+
+function dadsDeathDate() {
+  const startDate = getStartDate();
+  return new Date(startDate.getFullYear() + 28, 9, 29);
+}
+
 function generateGrid() {
   const datesArray = getDatesArray();
   const numWeeks = Math.floor(datesArray.length / 7);
@@ -93,9 +113,24 @@ function generateGrid() {
             dadsDeath(),
             getGridDate(getWeekNumber(currYear, currWeek))
           )
-            ? "class=fill-red"
+            ? "class=fill-black"
+            : isSameWeek(
+                dadsDeathDate(),
+                getGridDate(getWeekNumber(currYear, currWeek))
+              )
+            ? "class=fill-black"
             : isSameWeek(
                 weMet(),
+                getGridDate(getWeekNumber(currYear, currWeek))
+              )
+            ? "class=fill-yellow"
+            : isSameWeek(
+                graduatedCollege(),
+                getGridDate(getWeekNumber(currYear, currWeek))
+              )
+            ? "class=fill-red"
+            : isSameWeek(
+                graduatedUni(),
                 getGridDate(getWeekNumber(currYear, currWeek))
               )
             ? "class=fill-blue"
@@ -103,11 +138,14 @@ function generateGrid() {
                 getStartDate(),
                 getGridDate(getWeekNumber(currYear, currWeek))
               )
-            ? "class=fill-yellow"
-            : getWeekNumber(currYear, currWeek) < numWeeks
-            ? "class=fill"
-            : getWeekNumber(currYear, currWeek) == numWeeks
+            ? "class=fill-white"
+            : isSameWeek(
+                covid(),
+                getGridDate(getWeekNumber(currYear, currWeek))
+              )
             ? "class=fill-green"
+            : getWeekNumber(currYear, currWeek) <= numWeeks
+            ? "class=fill"
             : ""
         }></td>`;
       })

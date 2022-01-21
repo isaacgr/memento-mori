@@ -257,12 +257,12 @@ Grid
 .fill {
   background-color: #95a5a6;
 }
-.fill-red {
-  background-color: #c0392b;
+.fill-black {
+  background-color: #000000;
 }
 
 .fill-blue {
-  background-color: #3498db;
+  background-color: #2980b9;
 }
 
 .fill-green {
@@ -271,6 +271,14 @@ Grid
 
 .fill-yellow {
   background-color: #f1c40f;
+}
+
+.fill-red {
+  background-color: #c0392b;
+}
+
+.fill-white {
+  background-color: #ecf0f1;
 }
 
 /*
