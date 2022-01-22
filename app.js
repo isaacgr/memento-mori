@@ -59,10 +59,10 @@ function getDatesArray() {
 
 function renderAgeStats() {
   const age = getDatesArray().length;
-  document.getElementById("age").innerHTML = `Current Age: ${Math.floor(
+  document.getElementById("age").innerHTML = `Age: ${Math.floor(
     age / 7 / 52
   )} Years`;
-  document.getElementById("time-lived").innerHTML = `Time Lived: ${Math.floor(
+  document.getElementById("time-lived").innerHTML = `Time Alive: ${Math.floor(
     age / 7
   )} Weeks / ${age} Days`;
   document.getElementById("time-left").innerHTML = `Time Left: ${Math.floor(
