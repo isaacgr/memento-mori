@@ -4,16 +4,6 @@ Date.prototype.addDays = function (days) {
   return date;
 };
 
-function getDates(startDate, stopDate) {
-  var dateArray = new Array();
-  var currentDate = startDate;
-  while (currentDate <= stopDate) {
-    dateArray.push(new Date(currentDate));
-    currentDate = currentDate.addDays(1);
-  }
-  return dateArray;
-}
-
 Date.prototype.getWeekNumber = function () {
   var d = new Date(
     Date.UTC(this.getFullYear(), this.getMonth(), this.getDate())
@@ -23,6 +13,16 @@ Date.prototype.getWeekNumber = function () {
   var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
   return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
 };
+
+function getDates(startDate, stopDate) {
+  var dateArray = new Array();
+  var currentDate = startDate;
+  while (currentDate <= stopDate) {
+    dateArray.push(new Date(currentDate));
+    currentDate = currentDate.addDays(1);
+  }
+  return dateArray;
+}
 
 function isSameWeek(date1, date2) {
   if (
@@ -57,19 +57,6 @@ function getDatesArray() {
   return getDates(getStartDate(), new Date());
 }
 
-function renderAgeStats() {
-  const age = getDatesArray().length;
-  document.getElementById("age").innerHTML = `Age: ${Math.floor(
-    age / 7 / 52
-  )} Years`;
-  document.getElementById("time-lived").innerHTML = `Time Alive: ${Math.floor(
-    age / 7
-  )} Weeks / ${age} Days`;
-  document.getElementById("time-left").innerHTML = `Time Left: ${Math.floor(
-    80 * 52 - age / 7
-  )} Weeks / ${80 * 52 * 7 - age} Days`;
-}
-
 function graduatedCollege() {
   const startDate = getStartDate();
   return new Date(startDate.getFullYear() + 22, 3, 15);
@@ -100,9 +87,37 @@ function dadsDeathDate() {
   return new Date(startDate.getFullYear() + 28, 9, 29);
 }
 
-function graduatedHi() {
+function graduatedHigh() {
   const startDate = getStartDate();
   return new Date(startDate.getFullYear() + 17, 3, 16);
+}
+
+function getTdClassName(currYear, currWeek, numWeeks) {
+  const weekNumber = getWeekNumber(currYear, currWeek);
+  const gridDate = getGridDate(weekNumber);
+  if (isSameWeek(dadsDeath(), gridDate)) return "fill-black";
+  else if (isSameWeek(dadsDeathDate(), gridDate)) return "fill-black";
+  else if (isSameWeek(weMet(), gridDate)) return "fill-yellow";
+  else if (isSameWeek(graduatedCollege(), gridDate)) return "fill-red";
+  else if (isSameWeek(graduatedUni(), gridDate)) return "fill-blue";
+  else if (isSameWeek(getStartDate(), gridDate)) return "fill-white";
+  else if (isSameWeek(covid(), gridDate)) return "fill-green";
+  else if (isSameWeek(graduatedHigh(), gridDate)) return "fill-orange";
+  else if (getWeekNumber(currYear, currWeek) <= numWeeks) return "fill";
+  else return "";
+}
+
+function renderAgeStats() {
+  const age = getDatesArray().length;
+  document.getElementById("age").innerHTML = `Age: ${Math.floor(
+    age / 7 / 52
+  )} Years`;
+  document.getElementById("time-lived").innerHTML = `Time Alive: ${Math.floor(
+    age / 7
+  )} Weeks / ${age} Days`;
+  document.getElementById("time-left").innerHTML = `Time Left: ${Math.floor(
+    80 * 52 - age / 7
+  )} Weeks / ${80 * 52 * 7 - age} Days`;
 }
 
 function generateGrid() {
@@ -113,51 +128,11 @@ function generateGrid() {
       .map((_, week) => {
         let currYear = year + 1;
         let currWeek = week + 1;
-        return `<td id=${getWeekNumber(currYear, currWeek)} ${
-          isSameWeek(
-            dadsDeath(),
-            getGridDate(getWeekNumber(currYear, currWeek))
-          )
-            ? "class=fill-black"
-            : isSameWeek(
-                dadsDeathDate(),
-                getGridDate(getWeekNumber(currYear, currWeek))
-              )
-            ? "class=fill-black"
-            : isSameWeek(
-                weMet(),
-                getGridDate(getWeekNumber(currYear, currWeek))
-              )
-            ? "class=fill-yellow"
-            : isSameWeek(
-                graduatedCollege(),
-                getGridDate(getWeekNumber(currYear, currWeek))
-              )
-            ? "class=fill-red"
-            : isSameWeek(
-                graduatedUni(),
-                getGridDate(getWeekNumber(currYear, currWeek))
-              )
-            ? "class=fill-blue"
-            : isSameWeek(
-                getStartDate(),
-                getGridDate(getWeekNumber(currYear, currWeek))
-              )
-            ? "class=fill-white"
-            : isSameWeek(
-                covid(),
-                getGridDate(getWeekNumber(currYear, currWeek))
-              )
-            ? "class=fill-green"
-            : isSameWeek(
-                graduatedHi(),
-                getGridDate(getWeekNumber(currYear, currWeek))
-              )
-            ? "class=fill-orange"
-            : getWeekNumber(currYear, currWeek) <= numWeeks
-            ? "class=fill"
-            : ""
-        }></td>`;
+        const className = getTdClassName(currYear, currWeek, numWeeks);
+        return `<td id=${getWeekNumber(
+          currYear,
+          currWeek
+        )} class=${className}></td>`;
       })
       .join("");
     return `<tr>${tds}</tr>`;
