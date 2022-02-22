@@ -100,6 +100,11 @@ function dadsDeathDate() {
   return new Date(startDate.getFullYear() + 28, 9, 29);
 }
 
+function graduatedHi() {
+  const startDate = getStartDate();
+  return new Date(startDate.getFullYear() + 17, 3, 16);
+}
+
 function generateGrid() {
   const datesArray = getDatesArray();
   const numWeeks = Math.floor(datesArray.length / 7);
@@ -144,6 +149,11 @@ function generateGrid() {
                 getGridDate(getWeekNumber(currYear, currWeek))
               )
             ? "class=fill-green"
+            : isSameWeek(
+                graduatedHi(),
+                getGridDate(getWeekNumber(currYear, currWeek))
+              )
+            ? "class=fill-orange"
             : getWeekNumber(currYear, currWeek) <= numWeeks
             ? "class=fill"
             : ""
